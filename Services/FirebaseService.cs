@@ -9,17 +9,10 @@ namespace Services
   {
     private IConfiguration _config;
 
-    public FirebaseClient FirebaseClient { get; set; }
-
     public FirebaseService(IConfiguration config)
     {
       _config = config;
-
-    }
-
-    public static void MonitoraFirebase(IConfiguration config)
-    {
-      
+      /*
       GetInstance(config).Child("dinosaurs").AsObservable<Dinosaur>()
         .Subscribe(d =>
             {
@@ -32,7 +25,23 @@ namespace Services
             Console.WriteLine("Evento de Delete");
             }
             });
-      
+      */
+    }
+
+    public static void MonitoraFirebase(IConfiguration config)
+    {
+      GetInstance(config).Child("dinosaurs").AsObservable<Dinosaur>()
+        .Subscribe(d =>
+            {
+            if (d.EventType == FirebaseEventType.InsertOrUpdate)
+            {
+            Console.WriteLine("Evento de Insert");
+            }
+            else if (d.EventType == FirebaseEventType.Delete)
+            {
+            Console.WriteLine("Evento de Delete");
+            }
+            });
     }
 
     public FirebaseClient GetInstance()
@@ -52,8 +61,8 @@ namespace Services
 
     private static FirebaseClient GetInstance(IConfiguration config)
     {
-      string auth = config["firebash_auth"];
-      string baseUrl = config["firebase_client"];
+      string auth = config["firebase_auth"];
+      string baseUrl = config["firebase_url"];
 
       FirebaseClient firebaseClient = new(
           baseUrl,
@@ -65,5 +74,4 @@ namespace Services
       return firebaseClient;
     }
   }
-
 }
