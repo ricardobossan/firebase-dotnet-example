@@ -1,21 +1,24 @@
 ﻿using Firebase.Database;
 using Firebase.Database.Query;
 using Interfaces;
-using Microsoft.AspNetCore.Mvc;
 using Model;
+using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace Controllers
+namespace FirebaseAPi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class DinosaurController : ControllerBase
     {
         private IFirebaseService _firebaseService;
-        private static FirebaseClient _firebaseClient;
+        private FirebaseClient _firebaseClient;
 
-        public DinosaurController(IFirebaseService firebaseService) => _firebaseClient = firebaseService.GetInstance();
+        public DinosaurController(IFirebaseService firebaseService)
+        {
+            _firebaseClient = firebaseService.GetInstance();
+       }
 
         // GET: api/<DinosaurController>
         [HttpGet]
@@ -91,7 +94,7 @@ namespace Controllers
             }
             catch
             {
-                Console.WriteLine($"{name} not deleted");
+                Console.WriteLine($"{name} not updated");
             }
         }
 
