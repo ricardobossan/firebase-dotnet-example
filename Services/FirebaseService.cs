@@ -56,6 +56,11 @@ namespace Services
       string auth = _config["firebase_auth"];
       string baseUrl = _config["firebase_url"];
 
+      if ((auth is null || baseUrl is null) || (auth == string.Empty || baseUrl == string.Empty))
+      {
+        throw new Exception("firebase authentication id or url are missing");
+      }
+
       FirebaseClient firebaseClient = new(
           baseUrl,
           new FirebaseOptions
@@ -75,6 +80,7 @@ namespace Services
       {
         throw new Exception("firebase authentication id or url are missing");
       }
+
       FirebaseClient firebaseClient = new(
           baseUrl,
           new FirebaseOptions
